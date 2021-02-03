@@ -37,12 +37,13 @@ endif
           ld a,d
 .sz2hi:   cp 0
           jr z,.ll8
-
-.no8:     ld a,(hl)
+.no8:
+          ex de,hl
+          ld a,(hl)
           ex de,hl
           cp (hl)
-          ex de,hl
 if ESZ=2
+          ex de,hl
           inc l
           ld a,(hl)
           dec l
@@ -50,11 +51,11 @@ if ESZ=2
           inc l
           sbc a,(hl)
           dec l
-          ex de,hl
 endif
-          jr c,.ll4
+          jr nc,.ll4
 
-          ex de,hl
+          ld l,e
+          ld h,d
 .ll4:
 if ESZ=2
           inc e            ;even
