@@ -1,4 +1,4 @@
-;for pasmo assembler
+;for vasm assembler, madmac syntax
 
 ;#define sz SIZE
 ;#define type TYPE
@@ -19,7 +19,7 @@
 ;    if (i != k) goto l7;
 ;}
 
-selsort   ld a,e          ;min - HL, k - DE
+selsort:  ld a,e          ;min - HL, k - DE
           ld (.sz2lo+1),a
           ld a,d
           ld (.sz2hi+1),a
