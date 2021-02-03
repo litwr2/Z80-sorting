@@ -1,18 +1,10 @@
 ;for pasmo assembler
 
-selsort
-;.i2lo = 10  ;zero page locations, select any available on your system
-;.i2hi = .i2lo+1
-;.k2lo = 12
-;.k2hi = .k2lo+1
-;.minlo = 14
-;.minhi = .minlo+1
-
-          ld a,e
+selsort   ld a,e
           ld (.sz2lo+1),a
           ld a,d
           ld (.sz2hi+1),a
-          ld (.i2),hl
+          push hl
 .ll7:     ;ld hl,(.i2)
           ld e,l
           ld d,h
@@ -54,22 +46,18 @@ endif
 
 .ll8:
 if ESZ=1
-          push hl
           ld b,(hl)
-          ld hl,(.i2)
+          ex (sp),hl
           ld a,(hl)
           ld (hl),b
           inc hl
-          ld b,h
-          ld c,l
-          pop hl
+          ex (sp),hl
           ld (hl),a
-          ld h,b
-          ld l,c
+          pop hl
 else
           ld (.m1a+1),hl
           ld (.m1b+1),hl
-          ld hl,(.i2)
+          pop hl
           push hl
           ld (.m2a+1),hl
           ld (.m2b+1),hl
@@ -83,7 +71,7 @@ else
           inc l
           inc hl
 endif
-          ld (.i2),hl
+          push hl
           ld a,l
           cp e
           jp nz,.ll7
@@ -91,7 +79,7 @@ endif
           ld a,h
           cp d
           jp nz,.ll7
+
+          pop hl
           ret
-          
-.i2 dw 0
 
