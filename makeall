@@ -1,0 +1,4 @@
+rm *.bin *.lst
+./makex
+compile $1
+z80sim_x -xout.bin
