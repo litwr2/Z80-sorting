@@ -1,24 +1,42 @@
 ;for pasmo assembler
 
-selsort   ld a,e
+;#define sz SIZE
+;#define type TYPE
+;#define swap(x,y) {type t = x; x = y; y = t;}
+;type data[sz];
+;void selection() {
+;    type *i = data, *k, *min;
+;l7: min = i;
+;    k = i + 1;
+;l3: if (k == data + sz) goto l8;
+;    if (*k >= *min) goto l4;
+;    min = k;
+;l4: k++;
+;    goto l3;
+;l8: //if (min != i)
+;    swap(*min, *i);
+;    i++;
+;    if (i != k) goto l7;
+;}
+
+selsort   ld a,e          ;min - HL, k - DE
           ld (.sz2lo+1),a
           ld a,d
           ld (.sz2hi+1),a
           push hl
-.ll7:     ;ld hl,(.i2)
-          ld e,l
+.ll7:     ld e,l
           ld d,h
 if ESZ=2
           inc e            ;even
 endif
           inc de
-.ll3:     ld a,d
-.sz2hi:   cp 0
+.ll3:     ld a,e
+.sz2lo:   cp 0
           jp nz,.no8
 
-          ld a,e
-.sz2lo:   cp 0
-          jp z,.ll8
+          ld a,d
+.sz2hi:   cp 0
+          jr z,.ll8
 
 .no8:     ld a,(hl)
           ex de,hl
@@ -34,7 +52,7 @@ if ESZ=2
           dec l
           ex de,hl
 endif
-          jp c,.ll4
+          jr c,.ll4
 
           ex de,hl
 .ll4:
