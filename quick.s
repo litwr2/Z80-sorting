@@ -6,8 +6,8 @@ quicksort:
            ld (.lb),hl
            ex de,hl
            ld (.ub),hl
+           ex de,hl
 .qsok:
-           ld hl,(.lb)
            push hl
            ld de,(.ub)
            add hl,de
@@ -19,15 +19,15 @@ quicksort:
            ;inc l
            ;ld b,(hl)
            pop hl
-.loop1:
-           ld a,(hl)
+
+.loop1:    ld a,(hl)
            cp c
            jr nc,.qs_l1
 
            inc hl
            jp .loop1
-.qs_l1:
-           ex de,hl
+
+.qs_l1:    ex de,hl
            ld a,c
            cp (hl)
            ex de,hl
@@ -35,8 +35,8 @@ quicksort:
 
            dec de
            jp .qs_l1
-.qs_l3:
-           ld a,e
+
+.qs_l3:    ld a,e
            cp l
            ld a,d
            sbc h
@@ -45,16 +45,15 @@ quicksort:
 
            ld a,e
            cp l
-           jp z,.l2
-.l1:
-           ld b,(hl)
+           jr z,.l2
+
+.l1:       ld b,(hl)
            ex de,hl
            ld a,(hl)
            ld (hl),b
            ex de,hl
            ld (hl),a
-.l2:
-           inc hl
+.l2:       inc hl
            dec de
            ld a,e
            cp l
@@ -62,11 +61,13 @@ quicksort:
            sbc h
            jp nc,.loop1
 .qs_l8:
-           push hl
+           ld c,l
+           ld b,h
            ld hl,(.lb)
            xor a
            sbc hl,de
-           pop hl
+           ld h,b
+           ld l,c
            jr nc,.qs_l5
 
            xor a
@@ -91,15 +92,18 @@ quicksort:
            call quicksort   ;don't use the tail call optimization! it can be much slower for some data
            ret
 .qs_l5:
-           ld bc,(.ub)
+           ld de,(.ub)
            xor a
-           push hl
-           sbc hl,bc
-           pop hl
+           ld b,h
+           ld c,l
+           sbc hl,de
            ret nc
 
+           ld l,c
+           ld h,b
            ld (.lb),hl
            jp .qsok
 
 .lb: dc.w 0
 .ub: dc.w 0
+
