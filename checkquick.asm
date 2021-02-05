@@ -1,6 +1,6 @@
-ESZ = 1      ;an element size
+ESZ = 2      ;an element size
 data = $300  ;sorted array must start here, it must be word aligned if ESZ=2
-sz = 1000   ;number of elements in the array
+sz = 30000   ;number of elements in the array
 
      org $100
         ld hl,data

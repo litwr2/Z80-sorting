@@ -11,29 +11,51 @@ quicksort:
            push hl
            ld de,(.ub)
            add hl,de
-           srl h
+           rr h
            rr l
-           ;srl l
-           ;sla l
+if ESZ=2
+           srl l
+           sla l
+endif
            ld c,(hl)
-           ;inc l
-           ;ld b,(hl)
+if ESZ=2
+           inc l
+           ld b,(hl)
+endif
            pop hl
 
 .loop1:    ld a,(hl)
            cp c
+if ESZ=2
+           inc l
+           ld a,(hl)
+           dec l
+           sbc a,b
+endif
            jr nc,.qs_l1
 
+if ESZ=2
+           inc l
+endif
            inc hl
            jp .loop1
 
 .qs_l1:    ex de,hl
            ld a,c
            cp (hl)
+if ESZ=2
+           ld a,b
+           inc l
+           sbc a,(hl)
+           dec l
+endif
            ex de,hl
            jr nc,.qs_l3
 
            dec de
+if ESZ=2
+           dec e
+endif
            jp .qs_l1
 
 .qs_l3:    ld a,e
@@ -47,14 +69,32 @@ quicksort:
            cp l
            jr z,.l2
 
-.l1:       ld b,(hl)
+.l1:       push bc
+           ld b,(hl)
            ex de,hl
            ld a,(hl)
            ld (hl),b
            ex de,hl
            ld (hl),a
-.l2:       inc hl
-           dec de
+if ESZ=2
+           inc l
+           ld b,(hl)
+           ex de,hl
+           inc l
+           ld a,(hl)
+           ld (hl),b
+           dec l
+           ex de,hl
+           ld (hl),a
+           dec l
+endif
+           pop bc
+.l2:       dec de
+if ESZ=2
+           dec e
+           inc l
+endif
+           inc hl
            ld a,e
            cp l
            ld a,d
