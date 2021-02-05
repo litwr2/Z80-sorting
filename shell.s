@@ -46,9 +46,9 @@ shellsort:
           ld (.szlo+1),a
           ld a,d
           ld (.szhi+1),a
-.lss1:    ld a,(.tabsz)
-          or a
-          ret m
+          ld a,(.tabsz)
+          ;or a
+.lss1:    ret m
 
           ld hl,.gaptable
           add a,l
