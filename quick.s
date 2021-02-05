@@ -1,15 +1,33 @@
 ;for vasm assembler, madmac syntax
-stacklvl = 26   ;stacklvl*6+stackint is amount of free stack space required for successful work of this routine
-stackint = 10   ;stack space reserved for irq and nmi
+stacksz = 256   ;stacklsz-stackint is amount of free stack space required for successful work of this routine
+stackint = 20   ;stack space reserved for irq and nmi
 
 quicksort:    
-           ld (.lb),hl
-           ex de,hl
-           ld (.ub),hl
-           ex de,hl
-.qsok:
+           ld (.glb+1),hl
+           ld (.gub+1),de
+           ld hl,0
+           add hl,sp
+           ld (.csp+1),hl
+           ld de,stacksz-stackint
+           sbc hl,de   ;C=0
+           ld (.lim+1),hl
+.csp:      ld sp,0
+.gub:      ld de,0
+.glb:      ld hl,0
+.qs0:      ld (.lb+1),hl
+           ld (.ub+1),de
+           ld b,h
+           ld c,l
+           ld hl,0
+           add hl,sp
+.lim:      ld de,0
+           sbc hl,de   ;C=0
+           jr c,.csp
+
+           ld l,c
+           ld h,b
            push hl
-           ld de,(.ub)
+.ub:       ld de,0
            add hl,de
            rr h
            rr l
@@ -100,39 +118,25 @@ endif
            ld a,d
            sbc h
            jp nc,.loop1
-.qs_l8:
-           ld c,l
+
+.qs_l8:    ld c,l
            ld b,h
-           ld hl,(.lb)
+.lb:       ld hl,0
            xor a
            sbc hl,de
            ld h,b
            ld l,c
            jr nc,.qs_l5
 
-           xor a
-           ld bc,(.ub)
            push hl
-           sbc hl,bc
-           pop hl
-           jr nc,.l3
-
+           ld hl,(.ub+1)
            push hl
-           ld hl,(.ub)
-           push hl
-           ld hl,(.lb)
-           call quicksort
+           ld hl,(.lb+1)
+           call .qs0
            pop hl
-           ld (.ub),hl
+           ld (.ub+1),hl
            pop hl
-           ld (.lb),hl
-           jp .qsok
-.l3:
-           ld hl,(.lb)
-           call quicksort   ;don't use the tail call optimization! it can be much slower for some data
-           ret
-.qs_l5:
-           ld de,(.ub)
+.qs_l5:    ld de,(.ub+1)
            xor a
            ld b,h
            ld c,l
@@ -141,9 +145,7 @@ endif
 
            ld l,c
            ld h,b
-           ld (.lb),hl
-           jp .qsok
-
-.lb: dc.w 0
-.ub: dc.w 0
+           ld (.lb+1),hl
+           call .qs0
+           ret
 
