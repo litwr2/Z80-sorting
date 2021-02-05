@@ -5,8 +5,8 @@ sz = 30000   ;number of elements in the array
      org $100
         ld hl,data
         ld de,data+(sz-1)*ESZ
-        call quicksort     ;C=0 means fail
-        ;jr c,*+2
+        call quicksort     ;C=1 means fail
+        jr c,$+2
         halt               ;stop here
 
      org $200
