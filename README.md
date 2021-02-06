@@ -1,7 +1,7 @@
 # Z80-sorting
 implementations of various sorting algos for the Z80
 
-For each sorting routine the next information is provided:  its size, whether it uses stack or not, required amount of additional memory, the size of code for its call.  All sizes are in bytes.  Benchmark results are clock cycles.  One clock cycle is equal to one millionth of a second for the Z80 at 1 MHz.
+For each sorting routine the next information is provided:  its size, whether it uses stack or not, required amount of additional memory, the size of code for its call.  All sizes are in bytes.  Benchmark results are clock cycles.  One clock cycle is equal to one millionth of a second for the Z80 at 1 MHz.  All results were gotten using Z80-sim Release 1.28 by Udo Munk.
 
 Quicksort depends on its *stacksz* parameter, it must be more than binary logarithm of the number of elements in the sorted array multiplied by 6.  The value 156=26*6 is used as its default value. 
 
@@ -24,66 +24,66 @@ The killer sequence generators may be taken from this [file](https://github.com/
 
 Routine  | Size | Stack | Memory | Startup
 --------:|-----:|------:|-------:|-------:
-quick    |  165 |     + |      0 |      11
-shell    |  151 |     - |      0 |      11
+quick    |  164 |     + |      0 |      11
+shell    |  149 |     - |      0 |      11
 selection|   56 |     - |      0 |       9
-insertion|   59 |     - |      0 |       9
+insertion|   58 |     - |      0 |       9
 radix8   |  107 |     - |    512 |      11
 
 ### 1000 byte benchmarking
 
   &nbsp; |    quick |    shell |  selection |  insertion | radix8
 --------:|---------:|---------:|-----------:|-----------:|-------:
-random-1 |1,065,022 |1,866,699 | 35,674,816 | 29,886,475 | 212,273
-random-2 |1,071,649 |1,820,873 | 35,672,965 | 23,280,647 | 212,273
-2-values |1,144,183 |  984,902 | 35,661,547 | 14,537,127 | 212,293
-reversed |  834,619 |1,289,857 | 35,857,240 | 58,863,285 | 212,273
-sorted   |  778,596 |  895,729 | 35,660,026 |    135,048 | 212,273
-constant |1,034,119 |  895,729 | 35,660,026 |    135,048 | 212,303
+random-1 |1,054,634 |1,843,095 | 35,674,816 | 28,878,343 | 212,273
+random-2 |1,061,377 |1,798,425 | 35,672,965 | 22,496,347 | 212,273
+2-values |1,127,435 |  982,630 | 35,661,547 | 14,049,135 | 212,293
+reversed |  829,491 |1,279,909 | 35,857,240 | 56,873,005 | 212,273
+sorted   |  775,468 |  895,729 | 35,660,026 |    135,048 | 212,273
+constant |1,017,879 |  895,729 | 35,660,026 |    135,048 | 212,303
 
 ### 60000 byte benchmarking
 
   &nbsp; |     quick |     shell |     selection |     insertion |   radix8 
 --------:|----------:|----------:|--------------:|--------------:|---------:
-random-1 | 94,387,022|171,170,163|127,934,952,030|105,795,767,479|10,247,314
-random-2 | 98,225,569|165,407,774|127,935,004,194|105,218,341,161|10,248,504
-2-values |101,875,198|101,373,594|127,934,127,906| 52,893,795,179|10,249,454
-reversed | 75,791,311|126,589,403|127,945,609,713|211,665,542,075|10,247,314
-sorted   | 72,526,005| 92,315,601|127,934,037,372|      8,103,051|10,247,314
-constant | 96,482,607| 92,315,601|127,934,037,372|      8,103,051|10,249,464
+random-1 | 93,129,126|169,249,927|127,934,952,030|102,211,287,455|10,247,314
+random-2 | 96,971,625|163,627,266|127,935,004,194|101,653,426,549|10,248,504
+2-values |100,152,374|101,145,766|127,934,127,906| 51,101,831,035|10,249,454
+reversed | 74,906,055|125,665,359|127,945,609,713|204,493,798,627|10,247,314
+sorted   | 71,760,693| 92,315,601|127,934,037,372|      8,103,051|10,247,314
+constant | 94,772,463| 92,315,601|127,934,037,372|      8,103,051|10,249,464
 
 ## Word sorting
 
 Routine  | Size | Stack | Memory | Startup
 --------:|-----:|------:|-------:|-------:
-quick    |  193 |     + |      0 |      11
-shell    |  169 |     - |      0 |      11
+quick    |  191 |     + |      0 |      11
+shell    |  166 |     - |      0 |      11
 selection|   73 |     - |      0 |       9
-insertion|   77 |     - |      0 |       9
+insertion|   75 |     - |      0 |       9
 
 ### 1000 word benchmarking
 
   &nbsp; |     quick |    shell | selection | insertion 
 --------:|----------:|---------:|----------:|----------:
-random-1 |  1,636,036| 2,837,641| 56,734,545| 50,971,826
-random-2 |  1,625,956| 2,819,345| 56,735,454| 43,581,990
-4-values |  1,634,860| 1,482,268| 56,721,462| 38,165,603
-kill-qs-r|  2,692,114| 2,366,385| 56,723,517| 33,535,933
-kill-qs-l|  6,172,330| 2,348,367| 56,722,722| 33,535,409
-reversed |    861,848| 1,909,617| 57,468,234|100,071,429
+random-1 |  1,617,316| 2,784,001| 56,734,545| 48,940,866
+random-2 |  1,608,044| 2,766,537| 56,735,454| 41,846,478
+4-values |  1,602,284| 1,471,940| 56,721,462| 36,646,675
+kill-qs-r|  2,682,834| 2,328,209| 56,723,517| 32,202,093
+kill-qs-l|  6,163,626| 2,310,207| 56,722,722| 32,201,585
+reversed |    857,848| 1,884,897| 57,468,234| 96,075,429
 sorted   |    780,859| 1,180,111| 56,718,234|    173,066
-constant |  1,463,884| 1,180,111| 56,718,234|    173,066
+constant |  1,431,404| 1,180,111| 56,718,234|    173,066
 
 ### 30000 word benchmarking
 
   &nbsp; |     quick |     shell |     selection |    insertion 
 --------:|----------:|----------:|--------------:|-------------:
-random-1 | 64,518,060|150,260,383| 50,918,498,814|45,048,560,659
-random-2 | 64,820,094|145,086,006| 50,918,502,168|44,804,335,589
-4-values | 68,697,454| 69,665,421| 50,917,808,217|33,622,925,630
-kill-qs-r|105,430,408|121,595,937| 50,917,870,428|30,020,604,185
-kill-qs-l|200,949,103|121,240,494| 50,917,845,840|30,020,602,517
-reversed | 35,452,138| 94,455,103| 51,592,710,852|90,046,318,341
+random-1 | 63,675,436|147,334,447| 50,918,498,814|43,247,740,411
+random-2 | 63,954,406|142,326,158| 50,918,502,168|43,013,279,365
+4-values | 67,182,158| 69,300,965| 50,917,808,217|32,278,898,846
+kill-qs-r|105,135,304|119,597,489| 50,917,870,428|28,820,597,113
+kill-qs-l|200,652,479|119,242,046| 50,917,845,840|28,820,595,461
+reversed | 35,332,138| 93,260,287| 51,592,710,852|86,446,438,341
 sorted   | 33,050,832| 59,047,839| 50,917,710,852|     5,193,017
-constant | 65,879,380| 59,047,839| 50,917,710,852|     5,193,017
+constant | 64,289,236| 59,047,839| 50,917,710,852|     5,193,017
 

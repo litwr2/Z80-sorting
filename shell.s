@@ -97,21 +97,19 @@ endif
           jr nc,.l2
 
           ld b,(hl)
-          ex de,hl
-          ld a,(hl)
-          ld (hl),b
-          ex de,hl
+          ld a,(de)
           ld (hl),a
+          ld a,b
+          ld (de),a
 if ESZ=2
           inc l
           ld b,(hl)
-          ex de,hl
-          inc l
-          ld a,(hl)
-          ld (hl),b
-          dec l
-          ex de,hl
+          inc e
+          ld a,(de)
           ld (hl),a
+          ld a,b
+          ld (de),a
+          dec e
 endif
           ld h,d
           ld l,e

@@ -155,22 +155,20 @@ endif
 
 .l1:       push bc
            ld b,(hl)
-           ex de,hl
-           ld a,(hl)
-           ld (hl),b
-           ex de,hl
+           ld a,(de)
            ld (hl),a
+           ld a,b
+           ld (de),a
 if ESZ=2
            inc l
            ld b,(hl)
-           ex de,hl
-           inc l
-           ld a,(hl)
-           ld (hl),b
-           dec l
-           ex de,hl
+           inc e
+           ld a,(de)
            ld (hl),a
            dec l
+           ld a,b
+           ld (de),a
+           dec e
 endif
            pop bc
 .l2:       dec de

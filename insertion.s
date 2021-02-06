@@ -66,26 +66,18 @@ endif
           jr nc,.ll2
 
           ld b,(hl)
-if ESZ=1
-          ex de,hl
-          ld a,(hl)
-          ld (hl),b
-          ex de,hl
+          ld a,(de)
           ld (hl),a
-else
-          dec l
-          ld c,(hl)
-          ex de,hl
-          ld a,(hl)
-          ld (hl),b
+          ld a,b          
+          ld (de),a
+if ESZ=2
+          dec e
           dec l
           ld b,(hl)
-          ld (hl),c
-          ex de,hl
-          ld (hl),b
-          inc l
+          ld a,(de)
           ld (hl),a
-          dec l
+          ld a,b         
+          ld (de),a
 endif
           dec hl
 if ESZ=2
