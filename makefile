@@ -1,5 +1,4 @@
-CFLAGS = -O3
-#-Wall -Wextra -U_FORTIFY_SOURCE -fPIC -Wno-misleading-indentation -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-format
+CFLAGS = -O3 -fPIC
 
 LFLAGS =
 

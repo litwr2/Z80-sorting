@@ -109,85 +109,85 @@ quicksort: ld (.glb+1),hl
            add hl,de
            rr h
            rr l
-if ESZ=2
+      if ESZ=2
            srl l
            sla l
-endif
-       if ODD_OFFSET
+      endif
+      if ODD_OFFSET
 .evenness: nop
-       endif
+      endif
            ld c,(hl)
-if ESZ=2
-if ODD_OFFSET
+      if ESZ=2
+      if ODD_OFFSET
            inc hl
-else
+      else
            inc l
-endif
+      endif
            ld b,(hl)
-endif
+      endif
            pop hl
 
-.loop1:    ld a,(hl)
+.loop1:    ld a,(hl)     ;compare array[i] and x
            cp c
-if ESZ=2
-if ODD_OFFSET
+      if ESZ=2
+      if ODD_OFFSET
            inc hl
-else
+      else
            inc l
-endif
+      endif
            ld a,(hl)
-if ODD_OFFSET
+      if ODD_OFFSET
            dec hl
-else
+      else
            dec l
-endif
+      endif
            sbc a,b
-endif
+      endif
            jr nc,.qs_l1
 
-if ODD_OFFSET
+      if ODD_OFFSET
            inc hl
-endif
-if ESZ=2
+      endif
+      if ESZ=2
            inc l
-endif
-if ODD_OFFSET==0
+      endif
+      if ODD_OFFSET==0
            inc hl
-endif
+      endif
            jp .loop1
 
-.qs_l1:    ex de,hl
+.qs_l1:    ex de,hl     ;compare array[j] and x
            ld a,c
            cp (hl)
-if ESZ=2
+      if ESZ=2
            ld a,b
-if ODD_OFFSET
+      if ODD_OFFSET
            inc hl
-else
+      else
            inc l
-endif
+      endif
            sbc a,(hl)
-if ODD_OFFSET
+      if ODD_OFFSET
            dec hl
-else
+      else
            dec l
-endif
-endif
+      endif
+      endif
            ex de,hl
            jr nc,.qs_l3
 
-if ODD_OFFSET==0
+      if ODD_OFFSET==0
            dec de
-endif
-if ESZ=2
+      endif
+      if ESZ=2
            dec e
-endif
-if ODD_OFFSET
+      endif
+      if ODD_OFFSET
            dec de
-endif
+      endif
            jp .qs_l1
 
-.qs_l3:    ld a,e
+.qs_l3:    ld a,e     ;compare i and j
            cp l
            ld a,d
            sbc h
@@ -198,49 +198,49 @@ endif
            cp l
            jr z,.l2
 
-.l1:       push bc
+.l1:       push bc     ;exchange elements with i and j indices
            ld b,(hl)
            ld a,(de)
            ld (hl),a
            ld a,b
            ld (de),a
-if ESZ=2
-if ODD_OFFSET
+      if ESZ=2
+      if ODD_OFFSET
            inc hl
            inc de
-else
+      else
            inc l
            inc e
-endif
+      endif
            ld b,(hl)
            ld a,(de)
            ld (hl),a
            ld a,b
            ld (de),a
-if ODD_OFFSET
+      if ODD_OFFSET
            dec hl
            dec de
-else
+      else
            dec l
            dec e
-endif
-endif
+      endif
+      endif
            pop bc
 .l2:
-if ODD_OFFSET
+      if ODD_OFFSET
            inc hl
-else
+      else
            dec de
-endif
-if ESZ=2
+      endif
+      if ESZ=2
            dec e
            inc l
-endif
-if ODD_OFFSET==0
+      endif
+      if ODD_OFFSET==0
            inc hl
-else
+      else
            dec de
-endif
+      endif
            ld a,e
            cp l
            ld a,d
