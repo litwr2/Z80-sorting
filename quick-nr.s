@@ -1,26 +1,30 @@
 ;for vasm assembler, madmac syntax
-stacklvl = 26   ;stacklvl*6+stackint is amount of free stack space required for successful work of this routine
+;no recursion variant, it uses 1/3 less stack space
+stacklvl = 26   ;stacklvl*4+stackint is amount of free stack space required for successful work of this routine
 stackint = 20   ;stack space reserved for irq and nmi
 
-;#include <setjmp.h>
 ;#define sz 30000
 ;#define splimit 20
 ;#define type unsigned short
 ;#define ssz 200
 ;#define swap(x,y) {type t = x; x = y; y = t;}
-;jmp_buf jmp_point;
-;type *sa[ssz], **sp;
+;type *sa[ssz], **sp = sa + ssz;
 ;void push(type *d) {
-;    *sp-- = d;
+;    *--sp = d;
 ;}
 ;type* pop() {
-;    return *++sp;
+;    return *sp++;
 ;}
 ;type data[sz];
 ;type x, *ub, *lb, *i2, *j2;
+;type *glb = data, *gub = data + sz - 1;
 ;void quick0() {
-;    sp--;
-;    if (sp - sa < splimit) longjmp(jmp_point, 1);
+;LOOP:
+;    if (sp != sa) goto OK;
+;    lb = glb;
+;    ub = gub;
+;    sp = sa + ssz;
+;OK:
 ;    i2 = lb;
 ;    j2 = ub;
 ;    x = *(type*)(((unsigned long)j2 + (unsigned long)i2) >> 1 & ~(sizeof(type) - 1));
@@ -43,20 +47,20 @@ stackint = 20   ;stack space reserved for irq and nmi
 ;    push(i2);
 ;    push(ub);
 ;    ub = j2;
-;    quick0();
-;    ub = pop();
-;    i2 = pop();
+;    goto LOOP;
 ;qs_l5:
-;    if (i2 >= ub) goto quit;
+;    if (i2 >= ub) goto qs_l7;
+;    push(lb);
+;    push(j2);
 ;    lb = i2;
-;    quick0();
-;quit:
-;    sp++;
+;    goto LOOP;
+;qs_l7:
+;    if (sp == sa + ssz) return;
+;    ub = pop();
+;    lb = pop();
+;    goto OK;
 ;}
 ;void quick() {
-;    type *gub = ub, *glb = lb;
-;    setjmp(jmp_point);
-;    sp = sa + ssz - 1;
 ;    ub = gub;
 ;    lb = glb;
 ;    quick0();
@@ -65,10 +69,11 @@ stackint = 20   ;stack space reserved for irq and nmi
 quicksort:
            ld (.glb+1),hl
            ld (.gub+1),de
-           ld hl,0
-           add hl,sp
-           ld (.csp+1),hl   ;sp! fixme!!
-           ld de,stacklvl*6
+           ld hl,0         ;rm
+           add hl,sp        ;rm
+           ld (.csp+1),hl    ;;sp!!
+           ld (.inix+1),hl   ;;sp!!
+           ld de,stacklvl*4
            sbc hl,de   ;C=0
            ret c
 
@@ -90,7 +95,7 @@ quicksort:
            sbc hl,de   ;C=0
            jr c,.csp
 
-           ld l,c
+.qs1:      ld l,c
            ld h,b
            push hl
 .ub:       ld de,0
@@ -149,7 +154,7 @@ endif
            jr c,.qs_l8
            jr nz,.l1
 
-           ld a,e
+           ld a,e    ;?  - always do swaps
            cp l
            jr z,.l2
 
@@ -196,20 +201,33 @@ endif
            ld hl,(.ub+1)
            push hl
            ld hl,(.lb+1)
-           call .qs0
-           pop hl
-           ld (.ub+1),hl
-           pop hl
-.qs_l5:    ld de,(.ub+1)
-           xor a
-           ld b,h
-           ld c,l
-           sbc hl,de
-           ret nc
+           jp .qs0
 
-           ld l,c
-           ld h,b
-           ld (.lb+1),hl
-           call .qs0
-           ret
+.qs_l5:    ld bc,(.ub+1)   ;i - hl , j - de
+           push hl
+           xor a
+           sbc hl,bc
+           pop hl
+           jr nc,.qs_l7
+
+           ld bc,(.lb+1)
+           push bc
+           push de     ;don't remove these pushes, they actually make things faster
+           ld de,(.ub+1)
+           jp .qs0
+
+.qs_l7:    ld hl,0
+           add hl,sp
+.inix:     ld de,0
+           ld a,l
+           sub e
+           ld e,a
+           ld a,h
+           sbc a,d
+           or e
+           ret z
+
+           pop de
+           pop hl
+           jp .qs0
 

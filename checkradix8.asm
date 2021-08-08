@@ -9,6 +9,5 @@ sz = 60000    ;number of elements in the array
         call radix8
         halt               ;stop here
 
-        org $200
         include "radix8.s"
 

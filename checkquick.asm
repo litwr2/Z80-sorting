@@ -9,6 +9,6 @@ sz = 30000   ;number of elements in the array
         jr c,$+2
         halt               ;stop here
 
-     org $200
      include "quick.s"
+     ;include "quick-nr.s"
 

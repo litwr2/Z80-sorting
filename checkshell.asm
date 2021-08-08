@@ -12,5 +12,4 @@ sz = 1000   ;number of elements in the array
         call shellsort
         halt               ;stop here
 
-        org $200
         include "shell.s"
