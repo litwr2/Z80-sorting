@@ -138,7 +138,7 @@ puts("#######  #####    ###            #####    ###   #     #");
 	init_io();
 	//mon();
 
-    printf("ESZ=%d SZB=%d DATA=0x%x\n", ESZ, SZB, DATAADDR);
+    printf("ESZ=%d SZB=%d DATA=0x%x FILLT=%d\n", ESZ, SZB, DATAADDR, FILLT);
     if ((prg = fopen(argv[1], "r")) == 0) return 2;
     printf("%lu bytes loaded\n", fread(mem + STARTP, 1, 65536 - STARTP, prg));
     fclose(prg);

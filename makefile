@@ -1,8 +1,5 @@
-# Development
-#CFLAGS = -O3 -c -Wall -Wextra -fstack-protector-all -D_FORTIFY_SOURCE=2
-
-# Production
-CFLAGS = -O3 -c -Wall -Wextra -U_FORTIFY_SOURCE -fPIC -Wno-misleading-indentation -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-format
+CFLAGS = -O3
+#-Wall -Wextra -U_FORTIFY_SOURCE -fPIC -Wno-misleading-indentation -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-format
 
 LFLAGS =
 
@@ -46,5 +43,5 @@ insertion selection shell radix8 quick:
 	./checksort out.bin
 
 clean:
-	rm -f $(SIMDIR)/*.o *.o checksort data.h
+	rm -f $(SIMDIR)/*.o *.o checksort data.h out.*
 
