@@ -1,5 +1,6 @@
-data = $500   ;sorted array must start here, it must be word aligned
-auxtable = $300  ;address of the auxilary 512 byte array
+ESZ = 1       ;do not change this value!
+data = $400   ;sorted array must start here, it must be word aligned
+auxtable = $200  ;address of the auxilary 512 byte array
 sz = 60000    ;number of elements in the array
 
         org $100

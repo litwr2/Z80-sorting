@@ -1,5 +1,5 @@
 ESZ = 2        ;the element size
-data = $300    ;sorted array must start here, it must be word aligned if ESZ=2
+data = $400    ;sorted array must start here, it must be word aligned if ESZ=2
 sz = 1000     ;number of elements in the array
 
         org $100

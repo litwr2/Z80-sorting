@@ -66,8 +66,15 @@ stackint = 20   ;stack space reserved for irq and nmi
 ;    quick0();
 ;}
 
-quicksort:
-           ld (.glb+1),hl
+quicksort: ld (.glb+1),hl
+      if ODD_OFFSET
+           ld a,l
+           and 1
+           jr z,.z
+
+           ld a,$2c   ;inc l
+.z:        ld (.evenness),a
+      endif
            ld (.gub+1),de
            ld hl,0
            add hl,sp
@@ -106,9 +113,16 @@ if ESZ=2
            srl l
            sla l
 endif
+       if ODD_OFFSET
+.evenness: nop
+       endif
            ld c,(hl)
 if ESZ=2
+if ODD_OFFSET
+           inc hl
+else
            inc l
+endif
            ld b,(hl)
 endif
            pop hl
@@ -116,17 +130,30 @@ endif
 .loop1:    ld a,(hl)
            cp c
 if ESZ=2
+if ODD_OFFSET
+           inc hl
+else
            inc l
+endif
            ld a,(hl)
+if ODD_OFFSET
+           dec hl
+else
            dec l
+endif
            sbc a,b
 endif
            jr nc,.qs_l1
 
+if ODD_OFFSET
+           inc hl
+endif
 if ESZ=2
            inc l
 endif
+if ODD_OFFSET==0
            inc hl
+endif
            jp .loop1
 
 .qs_l1:    ex de,hl
@@ -134,16 +161,29 @@ endif
            cp (hl)
 if ESZ=2
            ld a,b
+if ODD_OFFSET
+           inc hl
+else
            inc l
+endif
            sbc a,(hl)
+if ODD_OFFSET
+           dec hl
+else
            dec l
+endif
 endif
            ex de,hl
            jr nc,.qs_l3
 
+if ODD_OFFSET==0
            dec de
+endif
 if ESZ=2
            dec e
+endif
+if ODD_OFFSET
+           dec de
 endif
            jp .qs_l1
 
@@ -165,23 +205,42 @@ endif
            ld a,b
            ld (de),a
 if ESZ=2
+if ODD_OFFSET
+           inc hl
+           inc de
+else
            inc l
-           ld b,(hl)
            inc e
+endif
+           ld b,(hl)
            ld a,(de)
            ld (hl),a
-           dec l
            ld a,b
            ld (de),a
+if ODD_OFFSET
+           dec hl
+           dec de
+else
+           dec l
            dec e
 endif
+endif
            pop bc
-.l2:       dec de
+.l2:
+if ODD_OFFSET
+           inc hl
+else
+           dec de
+endif
 if ESZ=2
            dec e
            inc l
 endif
+if ODD_OFFSET==0
            inc hl
+else
+           dec de
+endif
            ld a,e
            cp l
            ld a,d

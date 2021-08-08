@@ -1,5 +1,0 @@
-P=`pwd`
-cd z80sim
-make -f Makefile.linux_x
-mv z80sim_x $P
-cd ..
