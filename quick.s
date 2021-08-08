@@ -65,11 +65,9 @@ stackint = 20   ;stack space reserved for irq and nmi
 quicksort:
            ld (.glb+1),hl
            ld (.gub+1),de
-           ld hl,0
-           add hl,sp
-           ld (.csp+1),hl   ;sp! fixme!!
+           ld (.csp+1),sp
            ld de,stacklvl*6
-           sbc hl,de   ;C=0
+           sbc hl,de   ;C=0 ??
            ret c
 
            ld (.lim+1),hl
@@ -183,13 +181,12 @@ endif
            sbc h
            jp nc,.loop1
 
-.qs_l8:    ld c,l
-           ld b,h
-.lb:       ld hl,0
-           xor a
-           sbc hl,de
-           ld h,b
-           ld l,c
+.qs_l8:    
+.lb:       ld bc,0
+           ld a,c
+           sub e
+           ld a,b
+           sbc a,d
            jr nc,.qs_l5
 
            push hl
@@ -201,15 +198,13 @@ endif
            ld (.ub+1),hl
            pop hl
 .qs_l5:    ld de,(.ub+1)
-           xor a
-           ld b,h
-           ld c,l
-           sbc hl,de
+           ld a,l
+           sub e
+           ld a,h
+           sbc a,d
            ret nc
 
-           ld l,c
-           ld h,b
            ld (.lb+1),hl
-           call .qs0
+           call .qs0  ;don't use the tail call optimization! it can be much slower for some data
            ret
 

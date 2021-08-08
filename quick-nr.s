@@ -69,12 +69,10 @@ stackint = 20   ;stack space reserved for irq and nmi
 quicksort:
            ld (.glb+1),hl
            ld (.gub+1),de
-           ld hl,0         ;rm
-           add hl,sp        ;rm
-           ld (.csp+1),hl    ;;sp!!
-           ld (.inix+1),hl   ;;sp!!
+           ld (.csp+1),sp
+           ld (.inix+1),sp
            ld de,stacklvl*4
-           sbc hl,de   ;C=0
+           sbc hl,de   ;C=0  ??
            ret c
 
            ld (.lim+1),hl
@@ -188,13 +186,12 @@ endif
            sbc h
            jp nc,.loop1
 
-.qs_l8:    ld c,l
-           ld b,h
-.lb:       ld hl,0
-           xor a
-           sbc hl,de
-           ld h,b
-           ld l,c
+.qs_l8:    
+.lb:       ld bc,0
+           ld a,c
+           sub e
+           ld a,b
+           sbc a,d
            jr nc,.qs_l5
 
            push hl
@@ -204,10 +201,10 @@ endif
            jp .qs0
 
 .qs_l5:    ld bc,(.ub+1)   ;i - hl , j - de
-           push hl
-           xor a
-           sbc hl,bc
-           pop hl
+           ld a,l
+           sub c
+           ld a,h
+           sbc a,b
            jr nc,.qs_l7
 
            ld bc,(.lb+1)
