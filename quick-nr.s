@@ -69,10 +69,12 @@ stackint = 20   ;stack space reserved for irq and nmi
 quicksort:
            ld (.glb+1),hl
            ld (.gub+1),de
-           ld (.csp+1),sp
-           ld (.inix+1),sp
+           ld hl,0
+           add hl,sp
+           ld (.csp+1),hl
+           ld (.inix+1),hl
            ld de,stacklvl*4
-           sbc hl,de   ;C=0  ??
+           sbc hl,de   ;C=0
            ret c
 
            ld (.lim+1),hl
