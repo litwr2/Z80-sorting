@@ -83,16 +83,12 @@ quicksort: ld (.glb+1),hl
 .gub:      ld de,0
 .glb:      ld hl,0
 .qs0:      ld (.lb+1),hl
-           ld (.ub+1),de
-           ld b,h
-           ld c,l
+.qs1:      ld (.ub+1),de
 .lim:      ld hl,0
            add hl,sp
            jr nc,.csp
 
-           ld l,c
-           ld h,b
-           push hl
+           ld hl,(.lb+1)
 .ub:       ld de,0
            add hl,de
            rr h
@@ -113,7 +109,7 @@ quicksort: ld (.glb+1),hl
       endif
            ld b,(hl)
       endif
-           pop hl
+           ld hl,(.lb+1)
 
 .loop1:    ld a,(hl)     ;compare array[i] and x
            cp c
@@ -247,7 +243,7 @@ quicksort: ld (.glb+1),hl
            ld hl,(.ub+1)
            push hl
            ld hl,(.lb+1)
-           call .qs0
+           call .qs1
            pop hl
            ld (.ub+1),hl
            pop hl
@@ -258,7 +254,6 @@ quicksort: ld (.glb+1),hl
            sbc a,d
            ret nc
 
-           ld (.lb+1),hl
            call .qs0  ;don't use the tail call optimization! it can be much slower for some data
            ret
 

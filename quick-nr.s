@@ -87,17 +87,15 @@ quicksort: ld (.glb+1),hl
 .csp:      ld sp,0
 .gub:      ld de,0
 .glb:      ld hl,0
-.qs0:      ld (.lb+1),hl
-           ld (.ub+1),de
-           ld b,h
-           ld c,l
+           ld (.lb+1),hl
+.qs2:      ld (.ub+1),de
+.qs0:      
 .lim:      ld hl,0
            add hl,sp
            jr nc,.csp
-
-           ld l,c
-           ld h,b
-.qs1:      push hl
+           
+           ld hl,(.lb+1)
+.qs1:
 .ub:       ld de,0
            add hl,de
            rr h
@@ -118,7 +116,7 @@ quicksort: ld (.glb+1),hl
       endif
            ld b,(hl)
       endif
-           pop hl
+           ld hl,(.lb+1)
 
 .loop1:    ld a,(hl)     ;compare array[i] and x
            cp c
@@ -251,8 +249,7 @@ quicksort: ld (.glb+1),hl
            push hl
            ld hl,(.ub+1)
            push hl
-           ld hl,(.lb+1)
-           jp .qs0
+           jp .qs2
 
 .qs_l5:    ld bc,(.ub+1)   ;i - hl , j - de
            ld a,l
@@ -261,10 +258,9 @@ quicksort: ld (.glb+1),hl
            sbc a,b
            jr nc,.qs_l7
 
-           ld bc,(.lb+1)
-           push bc
-           push de     ;don't remove these pushes, they actually make things faster
-           ld de,(.ub+1)
+           push de
+           push de     ;don't remove these pushes, they can actually make things faster
+           ld (.lb+1),hl
            jp .qs0
 
 .qs_l7:    ld hl,0
@@ -280,5 +276,7 @@ quicksort: ld (.glb+1),hl
 
            pop de
            pop hl
-           jp .qs0
+           ld (.lb+1),hl
+           ld (.ub+1),de
+           jp .qs1
 
