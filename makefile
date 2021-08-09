@@ -1,4 +1,4 @@
-CFLAGS = -O3 -fPIC
+CFLAGS = -O3 -fPIC -DFILLT=$(FILLT)
 
 LFLAGS =
 
@@ -43,4 +43,3 @@ insertion selection shell radix8 quick:
 
 clean:
 	rm -f $(SIMDIR)/*.o *.o checksort data.h out.*
-

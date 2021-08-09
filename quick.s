@@ -1,6 +1,6 @@
 ;for vasm assembler, madmac syntax
 stacklvl = 26   ;stacklvl*6+stackint is amount of free stack space required for successful work of this routine
-stackint = 20   ;stack space reserved for irq and nmi
+;stackint = 20   ;stack space should be reserved for irq and nmi, this value isn't used in code
 
 ;#include <setjmp.h>
 ;#define sz 30000
@@ -76,14 +76,9 @@ quicksort: ld (.glb+1),hl
            add hl,sp
            ld (.csp+1),hl
            ld de,stacklvl*6
+           ex de,hl
            sbc hl,de   ;C=0
-           ret c
-
            ld (.lim+1),hl
-           ld de,stackint
-           sbc hl,de   ;C=0
-           ret c
-
 .csp:      ld sp,0
 .gub:      ld de,0
 .glb:      ld hl,0
@@ -91,11 +86,9 @@ quicksort: ld (.glb+1),hl
            ld (.ub+1),de
            ld b,h
            ld c,l
-           ld hl,0
+.lim:      ld hl,0
            add hl,sp
-.lim:      ld de,0
-           sbc hl,de   ;C=0
-           jr c,.csp
+           jr nc,.csp
 
            ld l,c
            ld h,b
