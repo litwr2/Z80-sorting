@@ -1,4 +1,5 @@
 ;for vasm assembler, madmac syntax
+;if ESZ=2 then an array must have the even alignment!
 
 ;#define sz SIZE
 ;#define type TYPE

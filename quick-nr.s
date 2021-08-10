@@ -38,7 +38,8 @@ stacklvl = 26   ;stacklvl*4+stackint is amount of free stack space required for 
 ;    goto qs_l1;
 ;qs_l3:
 ;    if (j2 < i2) goto qs_l8;
-;    if (j2 != i2) swap(*i2, *j2);
+;    //if (j2 != i2) 
+;    swap(*i2, *j2);
 ;    i2 += 1;
 ;    j2 -= 1;
 ;    if (j2 >= i2) goto qsloop1;
@@ -183,14 +184,17 @@ quicksort: ld (.glb+1),hl
            ld a,d
            sbc h
            jr c,.qs_l8
-           jr nz,.l1
+           ;jr nz,.l1
 
-           ld a,e    ;?  - always do swaps
-           cp l
-           jr z,.l2
+           ;ld a,e    ;always do swaps
+           ;cp l
+           ;jr z,.l2
 
-.l1:       push bc     ;exchange elements with i and j indices
-           ld b,(hl)
+.l1:       
+       if ESZ==2
+           ld iyl,b
+       endif
+           ld b,(hl)   ;exchange elements with i and j indices
            ld a,(de)
            ld (hl),a
            ld a,b
@@ -215,8 +219,8 @@ quicksort: ld (.glb+1),hl
            dec l
            dec e
       endif
+           ld b,iyl
       endif
-           pop bc
 .l2:
       if ODD_OFFSET
            inc hl

@@ -1,4 +1,5 @@
 ;for vasm assembler, madmac syntax
+;if ESZ=2 then an array must have the even alignment!
 
 ;#define sz SIZE
 ;#define type TYPE
@@ -36,7 +37,7 @@
 ;}
 
 shellsort:
-          ld (.tabsz),a   ;x
+          ld iyl,a   ;x
           ld (.data+1),hl
           ld a,l
           ld (.datalo+1),a
@@ -46,8 +47,8 @@ shellsort:
           ld (.szlo+1),a
           ld a,d
           ld (.szhi+1),a
-          ld a,(.tabsz)
-          ;or a
+          ld a,iyl
+          or a
 .lss1:    ret m
 
           ld hl,.gaptable
@@ -57,7 +58,7 @@ shellsort:
           adc 0
           ld h,a
           ld a,(hl)
-          inc hl       ;optimize?  inc l if .gaptable2 doesn't break page border
+          inc hl       ;inc l if .gaptable2 doesn't break page border
           ld h,(hl)
           ld l,a
           ld (.gap21+1),hl
@@ -74,9 +75,9 @@ shellsort:
 .szhi:    sbc a,0
           jp c,.l1
 
-          ld a,(.tabsz)
+          ld a,iyl
           sub a,2
-          ld (.tabsz),a
+          ld iyl,a
           jp .lss1
 
 .l1:      push de
@@ -113,7 +114,7 @@ if ESZ=2
 endif
           ld h,d
           ld l,e
-          xor a,a
+          xor a
 .gap22:   ld bc,0
           sbc hl,bc
           jr c,.l2
@@ -142,7 +143,7 @@ endif
           add hl,bc
           jp .lss3
 
-.tabsz: dc.b 0
+          ;even
 .gaptable: dc.w 1*ESZ, 4*ESZ, 10*ESZ, 23*ESZ, 57*ESZ, 132*ESZ, 301*ESZ, 701*ESZ, 1750*ESZ, 4759*ESZ, 12923*ESZ
 ;    if ESZ==1
 ;     dc.w 33001*ESZ

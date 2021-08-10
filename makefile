@@ -1,10 +1,11 @@
-CFLAGS = -O3 -fPIC -DFILLT=$(FILLT)
+CFLAGS = -O3 -fPIC -DFILLT=$(FILLT) -DSRAND=$(SRAND)
 
 LFLAGS =
 
-SIMDIR = z80sim
+SIMDIR = z80sim/srcsim
 
 OBJ =	checksort.o \
+	$(SIMDIR)/memory.o \
 	$(SIMDIR)/sim1.o \
 	$(SIMDIR)/sim1a.o \
 	$(SIMDIR)/sim2.o \
@@ -22,6 +23,7 @@ OBJ =	checksort.o \
 
 checksort : $(OBJ)
 checksort.o : checksort.c $(SIMDIR)/sim.h $(SIMDIR)/simglb.h data.h
+$(SIMDIR)/memory.o : $(SIMDIR)/memory.c
 $(SIMDIR)/sim1.o : $(SIMDIR)/sim1.c $(SIMDIR)/sim.h $(SIMDIR)/simglb.h
 $(SIMDIR)/sim1a.o : $(SIMDIR)/sim1a.c $(SIMDIR)/sim.h $(SIMDIR)/simglb.h
 $(SIMDIR)/sim2.o : $(SIMDIR)/sim2.c	$(SIMDIR)/sim.h $(SIMDIR)/simglb.h
@@ -31,9 +33,9 @@ $(SIMDIR)/sim5.o : $(SIMDIR)/sim5.c	$(SIMDIR)/sim.h $(SIMDIR)/simglb.h
 $(SIMDIR)/sim6.o : $(SIMDIR)/sim6.c	$(SIMDIR)/sim.h $(SIMDIR)/simglb.h
 $(SIMDIR)/sim7.o : $(SIMDIR)/sim7.c	$(SIMDIR)/sim.h $(SIMDIR)/simglb.h
 $(SIMDIR)/simctl.o : $(SIMDIR)/simctl.c $(SIMDIR)/sim.h $(SIMDIR)/simglb.h
-$(SIMDIR)/disas.o	: $(SIMDIR)/disas.c
+$(SIMDIR)/disas.o : $(SIMDIR)/disas.c
 $(SIMDIR)/simint.o : $(SIMDIR)/simint.c $(SIMDIR)/sim.h $(SIMDIR)/simglb.h
-$(SIMDIR)/iosim.o	: $(SIMDIR)/iosim.c $(SIMDIR)/sim.h	$(SIMDIR)/simglb.h
+$(SIMDIR)/iosim.o : $(SIMDIR)/iosim.c $(SIMDIR)/sim.h	$(SIMDIR)/simglb.h
 simfun.o : $(SIMDIR)/simfun.c $(SIMDIR)/sim.h
 simglb.o : $(SIMDIR)/simglb.c $(SIMDIR)/sim.h
 insertion selection shell radix8 quick:

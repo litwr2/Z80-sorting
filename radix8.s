@@ -60,7 +60,7 @@ radix8:  ld a,e
 .loop2:  ld bc,0   ;k
          ld e,a
 .chi1:   ld d,0
-         ld (savea),a
+         ld iyl,a
 .loop4:  ex de,hl
          ld a,c
          cp (hl)
@@ -70,7 +70,7 @@ radix8:  ld a,e
          dec h
          inc bc
          ex de,hl
-         ld a,(savea)
+         ld a,iyl
          jp nc,.l2
 
          ld (hl),a
@@ -80,6 +80,4 @@ radix8:  ld a,e
 .l2:     inc a
          jp nz,.loop2
          ret
-
-savea:   dc.b 0
 
